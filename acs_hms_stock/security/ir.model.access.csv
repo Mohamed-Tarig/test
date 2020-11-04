@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_acs_hms_stock,Stock Item,model_move_item_request,group_hms_stock,1,1,1,1
+access_acs_hms_stock_line,Stock request line,model_move_item_request_lines,group_hms_stock,1,1,1,1
+access_acs_hms_stock_line2,Stock Ipicking,stock.model_stock_picking,group_hms_stock,1,1,1,0
+access_acs_hms_res_users,Res Users,model_res_users,group_hms_stock,1,1,1,1

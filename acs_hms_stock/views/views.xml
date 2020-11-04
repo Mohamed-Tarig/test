@@ -1,0 +1,182 @@
+<odoo>
+	<data>
+
+  <!-- view inherit for page -->
+  <!-- <record id="view_surgery_view_inherit" model="ir.ui.view">
+            <field name="name">WSurgery Sperm</field>
+            <field name="model">move.item.request</field>
+            <field name="inherit_id" ref="acs_hms_hospitalization.hms_surgery_view"/>
+            <field name="arch" type="xml">
+                    <xpath expr="//page[@string='Discharge Summary']" position="after">
+                        <page string="Surgery Sperm">
+                        </page>
+                    </xpath>
+            </field>
+  </record> -->
+    <!-- tree view for request item -->
+    <record model="ir.ui.view" id="item_request_tree">
+      <field name="name">Requst List</field>
+      <field name="model">move.item.request</field>
+      <field name="arch" type="xml">
+        <tree string="Reqursts">
+          <field name="name"/>
+          <field name="request_date"/>
+            <field name="user_id"/>
+
+          <field name="state"/>
+
+          <!-- <field name="location_id"/> -->
+          <!-- <field name="location_dest_id"/> -->
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- <record model="ir.ui.view" id="item_request_form">
+      <field name="name">Requst List</field>
+      <field name="model">move.item.request.lines</field>
+      <field name="arch" type="xml">
+        <form string="Reqursts">
+           <field name="product_id"/>
+                      <field name="product_qty"/>
+                      <field name="request_id" invisible="1"/>
+        </form>
+      </field>
+    </record> -->
+
+
+          <!-- form view for requst item -->
+    <record model="ir.ui.view" id="request_item_form">
+      <field name="name">Requst Form</field>
+      <field name="model">move.item.request</field>
+      <field name="arch" type="xml">
+        <form string="Item Requst">
+          <header>
+          <button name="action_confirm" class="oe_highlight" string="Confirm" states="draft" type="object"/>
+                    <button name="create_stock_move" class="oe_highlight" string="Done" states="confirm" type="object"/>
+                    <!-- <button name="action_draft" class="oe_highlight" string="Set to Draft" states="done" type="object"/> -->
+                    <field name="state" widget="statusbar"/>
+          </header>
+          <sheet>
+            <div class="oe_title">
+                <h1>
+                    <field name="name" readonly="1"/>
+                </h1>
+            </div>
+            <group>
+              <group>
+                <field name="request_date" attrs='{"readonly": [("state", "!=","draft")]}'/>
+                 <field name="picking_type_id" domain="[('code', '=', 'internal'),('user_id', '=', user_id)]" attrs='{"readonly": [("state", "!=","draft")]}'  />
+                
+                 
+                 
+                
+              </group>                           
+              <!-- <group>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+              </group> -->
+              
+
+            </group>
+          <notebook>
+              <page string="Item lines">
+                   <field name="item_lines">
+                    <tree editable="bottom" >
+                      <field name="product_id" attrs='{"readonly": [("parent.state", "!=","draft")]}'/>
+                      <field name="product_qty" attrs='{"readonly": [("parent.state", "!=","draft")]}'/>
+                      <field name="request_id" invisible="1" />
+                    </tree>
+                  </field>
+               </page>
+               <page string="Other Info">
+
+               <group>
+               <field name="user_id" readonly="1"/>
+                <field name="company_id"  readonly="1"/>
+                </group>
+
+               </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+      
+    </record>
+
+    <!-- <record id="action_picking_22" model="ir.actions.act_window">
+            <field name="name">Request</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="domain"></field>
+            <field name="code">self.on_test()</field>
+            <field name="target">new</field> -->
+            <!-- <field name="context">{
+                    'contact_display': 'partner_address',
+            }
+            </field> -->
+            <!-- <field name="search_view_id" ref="view_picking_internal_search"/> -->
+            <!-- <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new transfer
+              </p>
+            </field>
+        </record> -->
+    <!-- action to opening view -->
+    <record model="ir.actions.act_window" id="action_item_request">
+      <field name="name">Item Requst</field>
+      <field name="res_model">move.item.request</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+            <field name="code">self.on_test()</field>
+
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create New Item Request
+        </p>
+      </field>
+    </record>
+
+
+   
+
+    <record model="ir.ui.view" id="view_picking_type_form_inherit">
+        <field name="name">Operation Types</field>
+        <field name="model">stock.picking.type</field>
+         <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+            <field name="user_id"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- res.users  -->
+
+    <record model="ir.ui.view" id="view_users_form_simple_modif_inherit">
+        <field name="name">res.users.form</field>
+        <field name="model">res.users</field>
+         <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="inside">
+            <group>
+              <field name="warehouse_id" cols="2"/>
+            </group>
+            </xpath>
+            
+        </field>
+    </record>
+
+
+
+    <menuitem id='stock_item_request' name="Item Request" 
+    parent='acs_hms_laboratory.menu_laboratory' action='action_item_request'/>
+    <!-- <menuitem id='stock_pharmacy_item_request' name="Item Request" 
+    parent='acs_hms_pharmacy.menu_pharmacy' action='action_item_request'/> -->
+    <menuitem id='stock_hospitalization_item_request' name="Item Request" 
+    parent='acs_hms_hospitalization.main_menu_hospitalization' action='action_item_request'/>
+  </data>
+</odoo>
